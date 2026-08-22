@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<title>Auto DM — Account Authorization</title>
+<title>Auto DM Manager</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
@@ -16,252 +15,247 @@
 
 :root{
   --bg:#07111b;
-  --card:#111a24;
-  --card2:#162536;
-  --text:#fff;
-  --muted:#8d9aaa;
+  --card:#101b27;
+  --card2:#16283a;
   --blue:#2496ed;
   --blue2:#1768aa;
   --green:#20c997;
   --red:#ff5d6c;
+  --text:#fff;
+  --muted:#8d9aaa;
   --border:rgba(255,255,255,.07);
 }
 
-html,body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-  background:#07111b;
-}
-
 body{
+  margin:0;
   min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(36,150,237,.3),transparent 42%),
+    linear-gradient(180deg,#07111b,#0b121a);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:
-    radial-gradient(circle at 50% -10%,rgba(36,150,237,.35),transparent 45%),
-    linear-gradient(180deg,#07111b,#0b1118 60%,#071019);
 }
 
 .page{
-  width:100%;
   max-width:620px;
   margin:auto;
-  padding:24px 16px 35px;
+  padding:20px 15px 35px;
 }
 
-.hero{
+.header{
   text-align:center;
-  padding:10px 8px 22px;
+  padding:10px 0 22px;
 }
 
 .logo{
-  width:78px;
-  height:78px;
-  margin:0 auto 18px;
-  border-radius:25px;
+  width:70px;
+  height:70px;
+  margin:auto;
+  border-radius:23px;
   display:grid;
   place-items:center;
-  font-size:36px;
-  background:linear-gradient(145deg,#2496ed,#1768aa);
-  box-shadow:0 18px 45px rgba(36,150,237,.28);
+  font-size:32px;
+  background:linear-gradient(145deg,var(--blue),var(--blue2));
+  box-shadow:0 15px 40px rgba(36,150,237,.25);
 }
 
 h1{
-  margin:0;
-  font-size:31px;
-  line-height:1.08;
-  letter-spacing:-.8px;
+  margin:15px 0 5px;
+  font-size:29px;
   font-weight:900;
 }
 
-.subtitle{
-  margin:13px auto 0;
-  max-width:480px;
+.sub{
   color:var(--muted);
-  font-size:16px;
-  line-height:1.55;
+  font-size:14px;
 }
 
 .card{
-  background:rgba(17,26,36,.97);
+  background:rgba(16,27,39,.97);
   border:1px solid var(--border);
-  border-radius:25px;
-  padding:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,.28);
+  border-radius:24px;
+  padding:19px;
+  margin-bottom:16px;
+  box-shadow:0 18px 50px rgba(0,0,0,.25);
 }
 
-.user-card{
-  display:none;
+.profile{
+  display:flex;
   align-items:center;
-  gap:14px;
-  padding:15px;
-  margin-bottom:18px;
-  border-radius:19px;
+  gap:13px;
+  padding:14px;
+  border-radius:18px;
   background:var(--card2);
+  margin-bottom:18px;
 }
 
 .avatar{
-  width:54px;
-  height:54px;
-  flex:0 0 54px;
+  width:52px;
+  height:52px;
   border-radius:50%;
   display:grid;
   place-items:center;
-  font-size:24px;
-  font-weight:800;
-  background:linear-gradient(145deg,#2496ed,#1768aa);
+  background:linear-gradient(145deg,var(--blue),var(--blue2));
+  font-size:22px;
+  font-weight:900;
 }
 
-.user-name{
+.name{
   font-size:17px;
   font-weight:800;
 }
 
-.user-id{
-  margin-top:4px;
+.id{
+  margin-top:3px;
   color:var(--muted);
   font-size:13px;
 }
 
-.item{
-  display:flex;
-  gap:14px;
-  padding:17px 0;
-  border-bottom:1px solid var(--border);
+.badge{
+  margin-left:auto;
+  padding:7px 10px;
+  border-radius:20px;
+  color:#bdf5dc;
+  background:rgba(32,201,151,.12);
+  font-size:11px;
+  font-weight:800;
 }
 
-.icon{
-  width:52px;
-  height:52px;
-  flex:0 0 52px;
-  border-radius:17px;
-  display:grid;
-  place-items:center;
-  font-size:25px;
-  background:#172c40;
+h2{
+  margin:0 0 16px;
+  font-size:20px;
 }
 
-.item b{
+label{
   display:block;
-  margin:2px 0 5px;
-  font-size:17px;
+  color:#b8c3cf;
+  font-size:13px;
+  font-weight:700;
+  margin:14px 0 7px;
 }
 
-.item span{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.5;
+input,textarea,select{
+  width:100%;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  border-radius:14px;
+  padding:14px;
+  background:#0b1621;
+  color:#fff;
+  font-size:15px;
+}
+
+textarea{
+  min-height:115px;
+  resize:none;
+}
+
+input:focus,textarea:focus,select:focus{
+  border-color:rgba(36,150,237,.65);
 }
 
 button{
   width:100%;
   border:0;
-  border-radius:17px;
-  padding:17px 18px;
-  margin-top:18px;
+  border-radius:15px;
+  padding:15px;
+  margin-top:15px;
   color:#fff;
   background:linear-gradient(135deg,var(--blue),var(--blue2));
-  font-size:16px;
+  font-size:15px;
   font-weight:900;
-  box-shadow:0 13px 32px rgba(36,150,237,.25);
 }
 
 button:active{
   transform:scale(.98);
 }
 
-button:disabled{
-  opacity:.6;
+.secondary{
+  background:#172536;
 }
 
-.cancel{
-  background:transparent;
-  box-shadow:none;
+.stop{
+  background:rgba(255,93,108,.13);
+  color:#ffb8c0;
+}
+
+.task{
+  background:#0b1621;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.task-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.task-title{
+  font-weight:800;
+}
+
+.task-target{
   color:var(--muted);
-  margin-top:7px;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.running{
+  color:#8df0c8;
+  font-size:12px;
+  font-weight:800;
+}
+
+.stopped{
+  color:#ff9aa5;
+  font-size:12px;
+  font-weight:800;
+}
+
+.task-msg{
+  margin-top:12px;
+  padding:10px;
+  border-radius:11px;
+  background:#111f2d;
+  color:#b8c3cf;
+  font-size:13px;
+  white-space:pre-wrap;
 }
 
 .status{
-  margin-top:18px;
-  padding:15px 16px;
-  border-radius:17px;
-  font-size:14px;
-  line-height:1.5;
   display:none;
+  padding:13px;
+  margin-top:14px;
+  border-radius:14px;
+  font-size:13px;
 }
 
-.status.info{
-  display:block;
-  color:#c8d8e8;
-  background:#122538;
-}
-
-.status.success{
+.success{
   display:block;
   color:#bdf5dc;
   background:rgba(32,201,151,.12);
-  border:1px solid rgba(32,201,151,.18);
 }
 
-.status.error{
+.error{
   display:block;
   color:#ffd0d5;
   background:rgba(255,93,108,.12);
-  border:1px solid rgba(255,93,108,.18);
 }
 
-.result{
-  display:none;
-  margin-top:15px;
-  padding:16px;
-  border-radius:18px;
-  background:#0c1722;
-}
-
-.result-row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:9px 0;
-  border-bottom:1px solid var(--border);
-}
-
-.result-row:last-child{
-  border-bottom:0;
-}
-
-.label{
+.empty{
   color:var(--muted);
-}
-
-.value{
-  font-weight:700;
-  text-align:right;
-  word-break:break-word;
+  text-align:center;
+  padding:25px 10px;
 }
 
 .footer{
   text-align:center;
   color:#68798b;
-  font-size:13px;
+  font-size:12px;
   margin-top:25px;
-}
-
-.spinner{
-  width:18px;
-  height:18px;
-  display:inline-block;
-  vertical-align:-4px;
-  margin-right:7px;
-  border:2px solid rgba(255,255,255,.35);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
 }
 </style>
 </head>
@@ -270,103 +264,69 @@ button:disabled{
 
 <div class="page">
 
-  <div class="hero">
-    <div class="logo">🔐</div>
-
-    <h1>ACCOUNT<br>AUTHORIZATION</h1>
-
-    <div class="subtitle">
-      Authorize this Mini App with your Telegram identity.
-    </div>
+  <div class="header">
+    <div class="logo">🤖</div>
+    <h1>Auto DM Manager</h1>
+    <div class="sub">Create and manage your messaging tasks</div>
   </div>
 
   <div class="card">
 
-    <div class="user-card" id="userCard">
+    <div class="profile">
 
       <div class="avatar" id="avatar">T</div>
 
       <div>
-        <div class="user-name" id="userName">
-          Telegram User
-        </div>
-
-        <div class="user-id" id="userId">
-          Telegram ID
-        </div>
+        <div class="name" id="userName">Telegram User</div>
+        <div class="id" id="userId">Telegram ID: —</div>
       </div>
+
+      <div class="badge">VERIFIED ✓</div>
 
     </div>
 
-    <div class="item">
-      <div class="icon">🛡️</div>
+    <h2>➕ Create Auto DM Task</h2>
 
-      <div>
-        <b>Telegram verification</b>
+    <label>Target</label>
 
-        <span>
-          Your Mini App session is associated with
-          the Telegram account that opened it.
-        </span>
-      </div>
-    </div>
+    <input
+      id="target"
+      type="text"
+      placeholder="@username or target"
+    >
 
-    <div class="item">
-      <div class="icon">🔐</div>
+    <label>Message</label>
 
-      <div>
-        <b>No OTP in this page</b>
+    <textarea
+      id="message"
+      placeholder="Write your message..."
+    ></textarea>
 
-        <span>
-          Never enter or send Telegram OTP,
-          2FA passwords, or session strings here.
-        </span>
-      </div>
-    </div>
+    <label>Delay between messages</label>
 
-    <div class="item">
-      <div class="icon">⏱️</div>
+    <select id="delay">
+      <option value="30">30 seconds</option>
+      <option value="60">1 minute</option>
+      <option value="120">2 minutes</option>
+      <option value="300">5 minutes</option>
+    </select>
 
-      <div>
-        <b>Backend verification</b>
-
-        <span>
-          Your Telegram Mini App identity will be
-          verified securely by the backend.
-        </span>
-      </div>
-    </div>
-
-    <button id="verify">
-      VERIFY TELEGRAM ACCOUNT
-    </button>
-
-    <button id="cancel" class="cancel">
-      CANCEL
+    <button id="create">
+      CREATE TASK
     </button>
 
     <div id="status" class="status"></div>
 
-    <div id="result" class="result">
+  </div>
 
-      <div class="result-row">
-        <span class="label">Status</span>
-        <span class="value">Verified ✅</span>
-      </div>
+  <div class="card">
 
-      <div class="result-row">
-        <span class="label">Telegram ID</span>
-        <span class="value" id="resultId">—</span>
-      </div>
+    <h2>📋 My Tasks</h2>
 
-      <div class="result-row">
-        <span class="label">Name</span>
-        <span class="value" id="resultName">—</span>
-      </div>
+    <div id="tasks">
 
-      <div class="result-row">
-        <span class="label">Username</span>
-        <span class="value" id="resultUsername">—</span>
+      <div class="empty">
+        No tasks created yet.
       </div>
 
     </div>
@@ -380,322 +340,258 @@ button:disabled{
 </div>
 
 <script>
-(function(){
 
-  const BACKEND_URL =
-    "https://auto-dm-mini-app-production.up.railway.app";
+const tg =
+  window.Telegram &&
+  window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
-  const tg =
-    window.Telegram &&
-    window.Telegram.WebApp
-      ? window.Telegram.WebApp
-      : null;
+const user =
+  tg &&
+  tg.initDataUnsafe &&
+  tg.initDataUnsafe.user
+    ? tg.initDataUnsafe.user
+    : null;
 
-  const verifyButton =
-    document.getElementById("verify");
+const tasks = [];
 
-  const cancelButton =
-    document.getElementById("cancel");
+const userName =
+  document.getElementById("userName");
 
-  const statusBox =
+const userId =
+  document.getElementById("userId");
+
+const avatar =
+  document.getElementById("avatar");
+
+if(tg){
+
+  tg.ready();
+  tg.expand();
+
+  if(tg.setHeaderColor){
+    tg.setHeaderColor("#07111b");
+  }
+
+  if(tg.setBackgroundColor){
+    tg.setBackgroundColor("#07111b");
+  }
+
+}
+
+if(user){
+
+  const fullName =
+    [user.first_name,user.last_name]
+      .filter(Boolean)
+      .join(" ") || "Telegram User";
+
+  userName.textContent =
+    fullName +
+    (user.username
+      ? "  @" + user.username
+      : "");
+
+  userId.textContent =
+    "Telegram ID: " + user.id;
+
+  avatar.textContent =
+    (user.first_name || "T")
+      .charAt(0)
+      .toUpperCase();
+
+}
+
+function showStatus(text,type){
+
+  const box =
     document.getElementById("status");
 
-  const resultBox =
-    document.getElementById("result");
+  box.className =
+    "status " + type;
 
-  const userCard =
-    document.getElementById("userCard");
+  box.textContent = text;
 
+}
 
-  function showStatus(message,type){
+function renderTasks(){
 
-    statusBox.className =
-      "status " + type;
+  const box =
+    document.getElementById("tasks");
 
-    statusBox.textContent =
-      message;
+  if(tasks.length === 0){
+
+    box.innerHTML =
+      '<div class="empty">No tasks created yet.</div>';
+
+    return;
+
   }
 
+  box.innerHTML = "";
 
-  function getUser(){
+  tasks.forEach((task,index)=>{
 
-    if(!tg){
-      return null;
-    }
+    const div =
+      document.createElement("div");
 
-    if(!tg.initDataUnsafe){
-      return null;
-    }
+    div.className = "task";
 
-    return tg.initDataUnsafe.user || null;
-  }
+    div.innerHTML = `
 
+      <div class="task-top">
 
-  function showUser(){
+        <div>
 
-    const user = getUser();
+          <div class="task-title">
+            Task #${index + 1}
+          </div>
 
-    if(!user){
-      return;
-    }
+          <div class="task-target">
+            ${escapeHtml(task.target)}
+          </div>
 
-    userCard.style.display =
-      "flex";
+        </div>
 
-    const first =
-      user.first_name || "";
+        <div class="${task.running ? "running" : "stopped"}">
+          ${task.running ? "● RUNNING" : "● STOPPED"}
+        </div>
 
-    const last =
-      user.last_name || "";
+      </div>
 
-    const fullName =
-      (first + " " + last).trim()
-      || "Telegram User";
+      <div class="task-msg">
+        ${escapeHtml(task.message)}
+      </div>
 
-    document.getElementById("userName")
-      .textContent = fullName;
+      <button
+        class="${task.running ? "stop" : "secondary"}"
+        onclick="toggleTask(${index})"
+      >
+        ${task.running ? "STOP TASK" : "START TASK"}
+      </button>
 
-    document.getElementById("userId")
-      .textContent =
-        "Telegram ID: " + user.id;
+      <button
+        class="stop"
+        onclick="deleteTask(${index})"
+      >
+        DELETE
+      </button>
 
-    document.getElementById("avatar")
-      .textContent =
-        first.charAt(0).toUpperCase()
-        || "T";
-  }
+    `;
 
+    box.appendChild(div);
 
-  async function verifyTelegram(){
+  });
 
-    if(!tg){
+}
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+document
+  .getElementById("create")
+  .addEventListener("click",()=>{
+
+    const target =
+      document
+        .getElementById("target")
+        .value
+        .trim();
+
+    const message =
+      document
+        .getElementById("message")
+        .value
+        .trim();
+
+    const delay =
+      Number(
+        document
+          .getElementById("delay")
+          .value
+      );
+
+    if(!target){
 
       showStatus(
-        "❌ Please open this page from the Telegram Mini App.",
+        "❌ Target enter karo.",
         "error"
       );
 
       return;
+
     }
 
-
-    const initData =
-      tg.initData || "";
-
-
-    if(!initData){
+    if(!message){
 
       showStatus(
-        "❌ Telegram authorization data was not received. Please reopen the Mini App from Telegram.",
+        "❌ Message enter karo.",
         "error"
       );
 
       return;
+
     }
 
+    tasks.push({
 
-    verifyButton.disabled =
-      true;
+      target,
+      message,
+      delay,
+      running:false
 
-    verifyButton.innerHTML =
-      '<span class="spinner"></span>VERIFYING...';
+    });
 
-    resultBox.style.display =
-      "none";
+    document
+      .getElementById("target")
+      .value = "";
 
+    document
+      .getElementById("message")
+      .value = "";
+
+    renderTasks();
 
     showStatus(
-      "🔄 Verifying your Telegram identity...",
-      "info"
+      "✅ Task created successfully.",
+      "success"
     );
 
+  });
 
-    try{
+window.toggleTask = function(index){
 
-      const controller =
-        new AbortController();
+  tasks[index].running =
+    !tasks[index].running;
 
-      const timeout =
-        setTimeout(
-          () => controller.abort(),
-          15000
-        );
+  renderTasks();
 
+};
 
-      const response =
-        await fetch(
-          BACKEND_URL + "/api/verify",
-          {
-            method:"POST",
+window.deleteTask = function(index){
 
-            headers:{
-              "Content-Type":
-                "application/json"
-            },
+  tasks.splice(index,1);
 
-            body:JSON.stringify({
-              initData:initData
-            }),
+  renderTasks();
 
-            signal:controller.signal
-          }
-        );
-
-
-      clearTimeout(timeout);
-
-
-      let data = {};
-
-      try{
-        data =
-          await response.json();
-      }catch(e){
-        data = {};
-      }
-
-
-      if(!response.ok || !data.ok){
-
-        throw new Error(
-          data.error ||
-          "Backend verification failed. HTTP " +
-          response.status
-        );
-      }
-
-
-      const user =
-        data.user || {};
-
-
-      document.getElementById("resultId")
-        .textContent =
-          user.id || "—";
-
-
-      document.getElementById("resultName")
-        .textContent =
-          [user.first_name,user.last_name]
-            .filter(Boolean)
-            .join(" ") || "—";
-
-
-      document.getElementById("resultUsername")
-        .textContent =
-          user.username
-            ? "@" + user.username
-            : "No username";
-
-
-      resultBox.style.display =
-        "block";
-
-
-      showStatus(
-        "✅ Telegram account verified successfully.",
-        "success"
-      );
-
-
-      verifyButton.innerHTML =
-        "VERIFIED ✓";
-
-
-    }catch(error){
-
-      console.error(
-        "Verification error:",
-        error
-      );
-
-
-      let message =
-        error.message ||
-        "Unable to connect to backend.";
-
-
-      if(error.name === "AbortError"){
-
-        message =
-          "Backend request timed out. Please try again.";
-      }
-
-
-      showStatus(
-        "❌ " + message,
-        "error"
-      );
-
-
-      verifyButton.disabled =
-        false;
-
-      verifyButton.innerHTML =
-        "TRY AGAIN";
-    }
-
-  }
-
-
-  verifyButton.addEventListener(
-    "click",
-    verifyTelegram
+  showStatus(
+    "Task deleted.",
+    "success"
   );
 
+};
 
-  cancelButton.addEventListener(
-    "click",
-    function(){
+renderTasks();
 
-      if(tg){
-
-        tg.close();
-
-      }else{
-
-        history.back();
-
-      }
-
-    }
-  );
-
-
-  if(tg){
-
-    try{
-
-      tg.ready();
-
-      tg.expand();
-
-      if(tg.setHeaderColor){
-        tg.setHeaderColor("#07111b");
-      }
-
-      if(tg.setBackgroundColor){
-        tg.setBackgroundColor("#07111b");
-      }
-
-    }catch(e){
-
-      console.error(e);
-
-    }
-
-    showUser();
-
-  }else{
-
-    showStatus(
-      "⚠️ This page must be opened from your Telegram Mini App.",
-      "error"
-    );
-
-  }
-
-})();
 </script>
 
 </body>
