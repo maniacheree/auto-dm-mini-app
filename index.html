@@ -3,32 +3,134 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Auto DM — Add Account</title>
+<title>Auto DM — Account Authorization</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:var(--tg-theme-bg-color,#0f1115);--card:var(--tg-theme-secondary-bg-color,#171a21);--text:var(--tg-theme-text-color,#fff);--hint:var(--tg-theme-hint-color,#8d95a5);--btn:var(--tg-theme-button-color,#2481cc);--btnt:var(--tg-theme-button-text-color,#fff)}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,rgba(36,129,204,.25),transparent 42%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.wrap{max-width:520px;margin:auto;padding:28px 18px 32px}.hero{text-align:center;padding:18px 0 22px}.icon{width:76px;height:76px;margin:0 auto 18px;display:grid;place-items:center;border-radius:24px;background:linear-gradient(145deg,#2481cc,#1768aa);box-shadow:0 14px 40px rgba(36,129,204,.28);font-size:38px}
-h1{margin:0;font-size:25px;letter-spacing:-.4px}.sub{margin:9px auto 0;max-width:380px;color:var(--hint);line-height:1.5;font-size:14px}.card{background:var(--card);border-radius:20px;padding:18px;margin-top:14px}.row{display:flex;gap:13px;align-items:flex-start;padding:12px 0}.row+.row{border-top:1px solid rgba(127,127,127,.13)}.badge{flex:0 0 38px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(36,129,204,.15);font-size:19px}.row b{display:block;font-size:15px;margin-bottom:3px}.row span{color:var(--hint);font-size:13px;line-height:1.4}.actions{margin-top:18px}button{width:100%;border:0;border-radius:15px;padding:15px 16px;font-size:15px;font-weight:700;cursor:pointer;background:var(--btn);color:var(--btnt)}.secondary{margin-top:10px;background:transparent;color:var(--hint);font-weight:600}.status{display:none;margin-top:14px;padding:13px 14px;border-radius:14px;background:rgba(36,129,204,.12);font-size:13px;line-height:1.45}.status.show{display:block}.foot{margin-top:18px;text-align:center;color:var(--hint);font-size:11px;line-height:1.5}
+:root{
+  --bg:var(--tg-theme-bg-color,#0d1117);
+  --card:var(--tg-theme-secondary-bg-color,#161b22);
+  --text:var(--tg-theme-text-color,#fff);
+  --hint:var(--tg-theme-hint-color,#8b949e);
+  --btn:var(--tg-theme-button-color,#2481cc);
+  --btnt:var(--tg-theme-button-text-color,#fff);
+  --ok:#2ea043;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -5%,rgba(36,129,204,.28),transparent 45%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.wrap{max-width:520px;margin:auto;padding:24px 17px 30px}
+.hero{text-align:center;padding:10px 0 18px}
+.logo{width:76px;height:76px;margin:auto auto 16px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#2481cc,#1768aa);font-size:37px;box-shadow:0 14px 38px rgba(36,129,204,.25)}
+h1{font-size:24px;margin:0 0 8px}.sub{margin:0;color:var(--hint);font-size:14px;line-height:1.5}
+.card{background:var(--card);border-radius:21px;padding:18px;margin-top:12px}
+.user{display:none;align-items:center;gap:12px;padding:12px;border-radius:15px;background:rgba(36,129,204,.10);margin-bottom:16px}
+.user.show{display:flex}.avatar{width:44px;height:44px;border-radius:50%;background:#2481cc;display:grid;place-items:center;font-weight:800}.uname{font-weight:700}.uid{font-size:11px;color:var(--hint);margin-top:3px}
+.item{display:flex;gap:12px;padding:12px 0}.item+.item{border-top:1px solid rgba(127,127,127,.14)}
+.ico{width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:rgba(36,129,204,.14);display:grid;place-items:center}
+.item b{display:block;font-size:14px;margin-bottom:3px}.item span{color:var(--hint);font-size:12.5px;line-height:1.4}
+button{width:100%;border:0;border-radius:15px;padding:15px 14px;background:var(--btn);color:var(--btnt);font-size:15px;font-weight:800;margin-top:12px}
+button:disabled{opacity:.55}
+.cancel{background:transparent;color:var(--hint);font-weight:600}
+.status{display:none;margin-top:14px;border-radius:14px;padding:13px;font-size:13px;line-height:1.45;background:rgba(46,160,67,.13)}
+.status.show{display:block}.status.error{background:rgba(248,81,73,.12)}
+.foot{text-align:center;color:var(--hint);font-size:10.5px;margin-top:16px;line-height:1.5}
 </style>
 </head>
 <body>
 <main class="wrap">
-<section class="hero"><div class="icon">🔐</div><h1>ADD TELEGRAM ACCOUNT</h1><p class="sub">Connect your own authorized account for a temporary task session.</p></section>
-<section class="card">
-<div class="row"><div class="badge">🛡️</div><div><b>Secure authorization</b><span>Authentication is handled through the secure authorization flow.</span></div></div>
-<div class="row"><div class="badge">⏱️</div><div><b>Temporary connection</b><span>The connection is intended for the configured task and can be disconnected afterward.</span></div></div>
-<div class="row"><div class="badge">🔒</div><div><b>No credentials in bot chat</b><span>Do not send OTPs, 2FA passwords, or session strings to the bot.</span></div></div>
-<div class="actions"><button id="connect">CONNECT ACCOUNT</button><button id="cancel" class="secondary">CANCEL</button></div>
-<div id="status" class="status"></div>
-</section>
-<div class="foot">Auto DM Manager • Secure account connection</div>
+  <section class="hero">
+    <div class="logo">🔐</div>
+    <h1>ACCOUNT AUTHORIZATION</h1>
+    <p class="sub">Authorize this Mini App with your Telegram identity.</p>
+  </section>
+
+  <section class="card">
+    <div id="userBox" class="user">
+      <div id="avatar" class="avatar">T</div>
+      <div>
+        <div id="userName" class="uname">Telegram User</div>
+        <div id="userId" class="uid"></div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="ico">🛡️</div>
+      <div><b>Telegram verification</b><span>Your Mini App session is associated with the Telegram account that opened it.</span></div>
+    </div>
+    <div class="item">
+      <div class="ico">🔒</div>
+      <div><b>No OTP in this page</b><span>Never enter or send Telegram OTP, 2FA passwords, or session strings here.</span></div>
+    </div>
+    <div class="item">
+      <div class="ico">⏱️</div>
+      <div><b>Task connection</b><span>Backend verification is required before any task can use an account.</span></div>
+    </div>
+
+    <button id="connect">VERIFY TELEGRAM ACCOUNT</button>
+    <button id="cancel" class="cancel">CANCEL</button>
+    <div id="status" class="status"></div>
+  </section>
+
+  <div class="foot">Auto DM Manager • Telegram Mini App</div>
 </main>
+
 <script>
-const tg=window.Telegram?.WebApp,status=document.getElementById("status");
-if(tg){tg.ready();tg.expand();tg.enableClosingConfirmation();}
-document.getElementById("connect").onclick=()=>{status.textContent="Secure authorization is not configured yet. Connect this button to your verified backend before enabling account authentication.";status.classList.add("show");};
-document.getElementById("cancel").onclick=()=>tg?tg.close():history.back();
+const tg = window.Telegram && window.Telegram.WebApp;
+const statusBox = document.getElementById("status");
+const connect = document.getElementById("connect");
+
+function status(text, error=false){
+  statusBox.textContent=text;
+  statusBox.classList.toggle("show",true);
+  statusBox.classList.toggle("error",error);
+}
+
+if(tg){
+  tg.ready();
+  tg.expand();
+
+  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
+  if(u){
+    document.getElementById("userBox").classList.add("show");
+    document.getElementById("userName").textContent =
+      [u.first_name,u.last_name].filter(Boolean).join(" ") || "Telegram User";
+    document.getElementById("userId").textContent = "Telegram ID: " + u.id;
+    document.getElementById("avatar").textContent =
+      (u.first_name || "T").charAt(0).toUpperCase();
+  }
+}
+
+connect.addEventListener("click", async () => {
+  if(!tg || !tg.initData){
+    status("Open this page from the Telegram Mini App button. A normal browser cannot provide Telegram WebApp authorization data.", true);
+    return;
+  }
+
+  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
+  if(!u){
+    status("Telegram user data was not provided. Reopen the Mini App from your bot.", true);
+    return;
+  }
+
+  connect.disabled = true;
+  connect.textContent = "VERIFYING...";
+
+  /*
+   * IMPORTANT:
+   * The backend must verify tg.initData server-side before treating
+   * this user as authenticated. This frontend does not create a
+   * personal Telegram account session and does not collect OTP/2FA.
+   */
+  status("Telegram identity detected. Backend signature verification is the next required step.");
+
+  setTimeout(() => {
+    connect.disabled = false;
+    connect.textContent = "VERIFY TELEGRAM ACCOUNT";
+  }, 1200);
+});
+
+document.getElementById("cancel").addEventListener("click",()=>{
+  if(tg) tg.close(); else history.back();
+});
 </script>
 </body>
 </html>
