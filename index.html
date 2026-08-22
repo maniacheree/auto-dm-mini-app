@@ -1,285 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-  <title>Auto DM — Telegram Authorization</title>
+<title>Auto DM — Account Authorization</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
-    :root {
-      --bg: #07111b;
-      --card: #111a24;
-      --card2: #162536;
-      --text: #ffffff;
-      --muted: #8d9aaa;
-      --blue: #2496ed;
-      --blue2: #1768aa;
-      --green: #20c997;
-      --red: #ff5d6c;
-      --border: rgba(255,255,255,.07);
-    }
+:root{
+  --bg:#07111b;
+  --card:#111a24;
+  --card2:#162536;
+  --text:#fff;
+  --muted:#8d9aaa;
+  --blue:#2496ed;
+  --blue2:#1768aa;
+  --green:#20c997;
+  --red:#ff5d6c;
+  --border:rgba(255,255,255,.07);
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(
-          circle at 50% -10%,
-          rgba(36,150,237,.35),
-          transparent 45%
-        ),
-        linear-gradient(180deg,#07111b,#0b1118 60%,#071019);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-    }
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:#07111b;
+}
 
-    .page {
-      width: 100%;
-      max-width: 620px;
-      margin: auto;
-      padding: 24px 16px 35px;
-    }
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(36,150,237,.35),transparent 45%),
+    linear-gradient(180deg,#07111b,#0b1118 60%,#071019);
+}
 
-    .hero {
-      text-align: center;
-      padding: 10px 8px 22px;
-    }
+.page{
+  width:100%;
+  max-width:620px;
+  margin:auto;
+  padding:24px 16px 35px;
+}
 
-    .logo {
-      width: 78px;
-      height: 78px;
-      margin: 0 auto 18px;
-      border-radius: 25px;
-      display: grid;
-      place-items: center;
-      font-size: 36px;
-      background: linear-gradient(145deg,#2496ed,#1768aa);
-      box-shadow: 0 18px 45px rgba(36,150,237,.28);
-    }
+.hero{
+  text-align:center;
+  padding:10px 8px 22px;
+}
 
-    h1 {
-      margin: 0;
-      font-size: 31px;
-      line-height: 1.08;
-      letter-spacing: -.8px;
-      font-weight: 900;
-    }
+.logo{
+  width:78px;
+  height:78px;
+  margin:0 auto 18px;
+  border-radius:25px;
+  display:grid;
+  place-items:center;
+  font-size:36px;
+  background:linear-gradient(145deg,#2496ed,#1768aa);
+  box-shadow:0 18px 45px rgba(36,150,237,.28);
+}
 
-    .subtitle {
-      margin: 13px auto 0;
-      max-width: 480px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
-    }
+h1{
+  margin:0;
+  font-size:31px;
+  line-height:1.08;
+  letter-spacing:-.8px;
+  font-weight:900;
+}
 
-    .card {
-      background: rgba(17,26,36,.96);
-      border: 1px solid var(--border);
-      border-radius: 25px;
-      padding: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.28);
-    }
+.subtitle{
+  margin:13px auto 0;
+  max-width:480px;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.55;
+}
 
-    .user-card {
-      display: none;
-      align-items: center;
-      gap: 14px;
-      padding: 15px;
-      margin-bottom: 18px;
-      border-radius: 19px;
-      background: var(--card2);
-    }
+.card{
+  background:rgba(17,26,36,.97);
+  border:1px solid var(--border);
+  border-radius:25px;
+  padding:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.28);
+}
 
-    .avatar {
-      width: 54px;
-      height: 54px;
-      flex: 0 0 54px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 24px;
-      font-weight: 800;
-      background: linear-gradient(145deg,#2496ed,#1768aa);
-    }
+.user-card{
+  display:none;
+  align-items:center;
+  gap:14px;
+  padding:15px;
+  margin-bottom:18px;
+  border-radius:19px;
+  background:var(--card2);
+}
 
-    .user-name {
-      font-size: 17px;
-      font-weight: 800;
-    }
+.avatar{
+  width:54px;
+  height:54px;
+  flex:0 0 54px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  font-weight:800;
+  background:linear-gradient(145deg,#2496ed,#1768aa);
+}
 
-    .user-id {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+.user-name{
+  font-size:17px;
+  font-weight:800;
+}
 
-    .item {
-      display: flex;
-      gap: 14px;
-      padding: 17px 0;
-      border-bottom: 1px solid var(--border);
-    }
+.user-id{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+}
 
-    .item:last-of-type {
-      border-bottom: 0;
-    }
+.item{
+  display:flex;
+  gap:14px;
+  padding:17px 0;
+  border-bottom:1px solid var(--border);
+}
 
-    .icon {
-      width: 52px;
-      height: 52px;
-      flex: 0 0 52px;
-      border-radius: 17px;
-      display: grid;
-      place-items: center;
-      font-size: 25px;
-      background: #172c40;
-    }
+.icon{
+  width:52px;
+  height:52px;
+  flex:0 0 52px;
+  border-radius:17px;
+  display:grid;
+  place-items:center;
+  font-size:25px;
+  background:#172c40;
+}
 
-    .item b {
-      display: block;
-      margin: 2px 0 5px;
-      font-size: 17px;
-    }
+.item b{
+  display:block;
+  margin:2px 0 5px;
+  font-size:17px;
+}
 
-    .item span {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
+.item span{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
 
-    button {
-      width: 100%;
-      border: 0;
-      cursor: pointer;
-      border-radius: 17px;
-      padding: 17px 18px;
-      margin-top: 18px;
-      color: #fff;
-      background: linear-gradient(135deg,var(--blue),var(--blue2));
-      font-size: 16px;
-      font-weight: 900;
-      box-shadow: 0 13px 32px rgba(36,150,237,.25);
-      transition: .18s;
-    }
+button{
+  width:100%;
+  border:0;
+  border-radius:17px;
+  padding:17px 18px;
+  margin-top:18px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  font-size:16px;
+  font-weight:900;
+  box-shadow:0 13px 32px rgba(36,150,237,.25);
+}
 
-    button:active {
-      transform: scale(.98);
-    }
+button:active{
+  transform:scale(.98);
+}
 
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
+button:disabled{
+  opacity:.6;
+}
 
-    .cancel {
-      background: transparent;
-      box-shadow: none;
-      color: var(--muted);
-      margin-top: 7px;
-    }
+.cancel{
+  background:transparent;
+  box-shadow:none;
+  color:var(--muted);
+  margin-top:7px;
+}
 
-    .status {
-      margin-top: 18px;
-      padding: 15px 16px;
-      border-radius: 17px;
-      font-size: 14px;
-      line-height: 1.5;
-      display: none;
-    }
+.status{
+  margin-top:18px;
+  padding:15px 16px;
+  border-radius:17px;
+  font-size:14px;
+  line-height:1.5;
+  display:none;
+}
 
-    .status.info {
-      display: block;
-      color: #c8d8e8;
-      background: #122538;
-    }
+.status.info{
+  display:block;
+  color:#c8d8e8;
+  background:#122538;
+}
 
-    .status.success {
-      display: block;
-      color: #bdf5dc;
-      background: rgba(32,201,151,.12);
-      border: 1px solid rgba(32,201,151,.18);
-    }
+.status.success{
+  display:block;
+  color:#bdf5dc;
+  background:rgba(32,201,151,.12);
+  border:1px solid rgba(32,201,151,.18);
+}
 
-    .status.error {
-      display: block;
-      color: #ffd0d5;
-      background: rgba(255,93,108,.12);
-      border: 1px solid rgba(255,93,108,.18);
-    }
+.status.error{
+  display:block;
+  color:#ffd0d5;
+  background:rgba(255,93,108,.12);
+  border:1px solid rgba(255,93,108,.18);
+}
 
-    .result {
-      display: none;
-      margin-top: 15px;
-      padding: 16px;
-      border-radius: 18px;
-      background: #0c1722;
-    }
+.result{
+  display:none;
+  margin-top:15px;
+  padding:16px;
+  border-radius:18px;
+  background:#0c1722;
+}
 
-    .result-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border);
-    }
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+}
 
-    .result-row:last-child {
-      border-bottom: 0;
-    }
+.result-row:last-child{
+  border-bottom:0;
+}
 
-    .label {
-      color: var(--muted);
-    }
+.label{
+  color:var(--muted);
+}
 
-    .value {
-      font-weight: 700;
-      text-align: right;
-      word-break: break-word;
-    }
+.value{
+  font-weight:700;
+  text-align:right;
+  word-break:break-word;
+}
 
-    .footer {
-      text-align: center;
-      color: #68798b;
-      font-size: 13px;
-      margin-top: 25px;
-    }
+.footer{
+  text-align:center;
+  color:#68798b;
+  font-size:13px;
+  margin-top:25px;
+}
 
-    .spinner {
-      width: 18px;
-      height: 18px;
-      display: inline-block;
-      vertical-align: -4px;
-      margin-right: 7px;
-      border: 2px solid rgba(255,255,255,.35);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
+.spinner{
+  width:18px;
+  height:18px;
+  display:inline-block;
+  vertical-align:-4px;
+  margin-right:7px;
+  border:2px solid rgba(255,255,255,.35);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+</style>
 </head>
 
 <body>
@@ -299,6 +283,7 @@
   <div class="card">
 
     <div class="user-card" id="userCard">
+
       <div class="avatar" id="avatar">T</div>
 
       <div>
@@ -310,6 +295,7 @@
           Telegram ID
         </div>
       </div>
+
     </div>
 
     <div class="item">
@@ -317,6 +303,7 @@
 
       <div>
         <b>Telegram verification</b>
+
         <span>
           Your Mini App session is associated with
           the Telegram account that opened it.
@@ -329,6 +316,7 @@
 
       <div>
         <b>No OTP in this page</b>
+
         <span>
           Never enter or send Telegram OTP,
           2FA passwords, or session strings here.
@@ -341,6 +329,7 @@
 
       <div>
         <b>Backend verification</b>
+
         <span>
           Your Telegram Mini App identity will be
           verified securely by the backend.
@@ -391,13 +380,16 @@
 </div>
 
 <script>
+(function(){
 
   const BACKEND_URL =
     "https://auto-dm-mini-app-production.up.railway.app";
 
-  const tg = window.Telegram && window.Telegram.WebApp
-    ? window.Telegram.WebApp
-    : null;
+  const tg =
+    window.Telegram &&
+    window.Telegram.WebApp
+      ? window.Telegram.WebApp
+      : null;
 
   const verifyButton =
     document.getElementById("verify");
@@ -414,29 +406,41 @@
   const userCard =
     document.getElementById("userCard");
 
-  function showStatus(message, type) {
-    statusBox.className = "status " + type;
-    statusBox.innerHTML = message;
+
+  function showStatus(message,type){
+
+    statusBox.className =
+      "status " + type;
+
+    statusBox.textContent =
+      message;
   }
 
-  function getTelegramUser() {
 
-    if (!tg || !tg.initDataUnsafe) {
+  function getUser(){
+
+    if(!tg){
+      return null;
+    }
+
+    if(!tg.initDataUnsafe){
       return null;
     }
 
     return tg.initDataUnsafe.user || null;
   }
 
-  function showTelegramUser() {
 
-    const user = getTelegramUser();
+  function showUser(){
 
-    if (!user) {
+    const user = getUser();
+
+    if(!user){
       return;
     }
 
-    userCard.style.display = "flex";
+    userCard.style.display =
+      "flex";
 
     const first =
       user.first_name || "";
@@ -445,90 +449,137 @@
       user.last_name || "";
 
     const fullName =
-      (first + " " + last).trim() || "Telegram User";
+      (first + " " + last).trim()
+      || "Telegram User";
 
     document.getElementById("userName")
       .textContent = fullName;
 
     document.getElementById("userId")
-      .textContent = "Telegram ID: " + user.id;
+      .textContent =
+        "Telegram ID: " + user.id;
 
     document.getElementById("avatar")
       .textContent =
-        first.charAt(0).toUpperCase() || "T";
+        first.charAt(0).toUpperCase()
+        || "T";
   }
 
-  async function verifyTelegram() {
 
-    if (!tg) {
+  async function verifyTelegram(){
+
+    if(!tg){
+
       showStatus(
         "❌ Please open this page from the Telegram Mini App.",
         "error"
       );
+
       return;
     }
 
-    const initData = tg.initData;
 
-    if (!initData) {
+    const initData =
+      tg.initData || "";
+
+
+    if(!initData){
+
       showStatus(
-        "❌ Telegram authorization data was not received. Open the Mini App directly from Telegram.",
+        "❌ Telegram authorization data was not received. Please reopen the Mini App from Telegram.",
         "error"
       );
+
       return;
     }
 
-    verifyButton.disabled = true;
+
+    verifyButton.disabled =
+      true;
 
     verifyButton.innerHTML =
       '<span class="spinner"></span>VERIFYING...';
 
-    resultBox.style.display = "none";
+    resultBox.style.display =
+      "none";
+
 
     showStatus(
-      "🔄 Verifying your Telegram identity with the secure backend...",
+      "🔄 Verifying your Telegram identity...",
       "info"
     );
 
-    try {
 
-      const response = await fetch(
-        BACKEND_URL + "/api/verify",
-        {
-          method: "POST",
+    try{
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+      const controller =
+        new AbortController();
 
-          body: JSON.stringify({
-            initData: initData
-          })
-        }
-      );
+      const timeout =
+        setTimeout(
+          () => controller.abort(),
+          15000
+        );
 
-      const data = await response.json();
 
-      if (!response.ok || !data.ok) {
+      const response =
+        await fetch(
+          BACKEND_URL + "/api/verify",
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+              initData:initData
+            }),
+
+            signal:controller.signal
+          }
+        );
+
+
+      clearTimeout(timeout);
+
+
+      let data = {};
+
+      try{
+        data =
+          await response.json();
+      }catch(e){
+        data = {};
+      }
+
+
+      if(!response.ok || !data.ok){
 
         throw new Error(
           data.error ||
-          "Telegram verification failed."
+          "Backend verification failed. HTTP " +
+          response.status
         );
       }
 
+
       const user =
         data.user || {};
+
 
       document.getElementById("resultId")
         .textContent =
           user.id || "—";
 
+
       document.getElementById("resultName")
         .textContent =
-          [user.first_name, user.last_name]
+          [user.first_name,user.last_name]
             .filter(Boolean)
             .join(" ") || "—";
+
 
       document.getElementById("resultUsername")
         .textContent =
@@ -536,78 +587,115 @@
             ? "@" + user.username
             : "No username";
 
-      resultBox.style.display = "block";
+
+      resultBox.style.display =
+        "block";
+
 
       showStatus(
         "✅ Telegram account verified successfully.",
         "success"
       );
 
+
       verifyButton.innerHTML =
         "VERIFIED ✓";
 
-    } catch (error) {
 
-      console.error(error);
+    }catch(error){
+
+      console.error(
+        "Verification error:",
+        error
+      );
+
+
+      let message =
+        error.message ||
+        "Unable to connect to backend.";
+
+
+      if(error.name === "AbortError"){
+
+        message =
+          "Backend request timed out. Please try again.";
+      }
+
 
       showStatus(
-        "❌ " + (
-          error.message ||
-          "Unable to connect to the backend."
-        ),
+        "❌ " + message,
         "error"
       );
 
-      verifyButton.disabled = false;
+
+      verifyButton.disabled =
+        false;
 
       verifyButton.innerHTML =
         "TRY AGAIN";
     }
+
   }
+
 
   verifyButton.addEventListener(
     "click",
     verifyTelegram
   );
 
+
   cancelButton.addEventListener(
     "click",
-    function () {
+    function(){
 
-      if (tg) {
+      if(tg){
+
         tg.close();
-      } else {
+
+      }else{
+
         history.back();
+
       }
 
     }
   );
 
-  if (tg) {
 
-    tg.ready();
+  if(tg){
 
-    tg.expand();
+    try{
 
-    if (tg.setHeaderColor) {
-      tg.setHeaderColor("#07111b");
+      tg.ready();
+
+      tg.expand();
+
+      if(tg.setHeaderColor){
+        tg.setHeaderColor("#07111b");
+      }
+
+      if(tg.setBackgroundColor){
+        tg.setBackgroundColor("#07111b");
+      }
+
+    }catch(e){
+
+      console.error(e);
+
     }
 
-    if (tg.setBackgroundColor) {
-      tg.setBackgroundColor("#07111b");
-    }
+    showUser();
 
-    showTelegramUser();
-
-  } else {
+  }else{
 
     showStatus(
-      "⚠️ Open this page from your Telegram Mini App. A normal browser cannot provide Telegram authorization data.",
+      "⚠️ This page must be opened from your Telegram Mini App.",
       "error"
     );
 
   }
 
+})();
 </script>
 
 </body>
