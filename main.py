@@ -1,10 +1,70 @@
 import os
+import hashlib
+import hmac
+import json
+import urllib.parse
+
 from flask import Flask, request, jsonify
-from miniapp import verify_telegram_init_data
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+
+def verify_telegram_init_data(init_data, bot_token):
+    try:
+        parsed = urllib.parse.parse_qs(
+            init_data,
+            keep_blank_values=True
+        )
+
+        received_hash = parsed.get("hash", [None])[0]
+
+        if not received_hash:
+            return None, "Missing Telegram hash"
+
+        data_check = []
+
+        for key in sorted(parsed.keys()):
+            if key == "hash":
+                continue
+
+            value = parsed[key][0]
+            data_check.append(f"{key}={value}")
+
+        data_check_string = "\n".join(data_check)
+
+        secret_key = hmac.new(
+            b"WebAppData",
+            bot_token.encode(),
+            hashlib.sha256
+        ).digest()
+
+        calculated_hash = hmac.new(
+            secret_key,
+            data_check_string.encode(),
+            hashlib.sha256
+        ).hexdigest()
+
+        if not hmac.compare_digest(
+            calculated_hash,
+            received_hash
+        ):
+            return None, "Invalid Telegram signature"
+
+        user_raw = parsed.get("user", [None])[0]
+
+        if not user_raw:
+            return None, "Telegram user data missing"
+
+        user = json.loads(user_raw)
+
+        return user, None
+
+    except Exception as e:
+        return None, f"Verification error: {str(e)}"
 
 
 @app.get("/")
@@ -32,6 +92,7 @@ def verify():
         }), 500
 
     body = request.get_json(silent=True) or {}
+
     init_data = body.get("initData")
 
     if not init_data:
