@@ -13,19 +13,13 @@ CORS(app)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-# Temporary in-memory verification state.
-# This stores only the verified Telegram ID/profile,
-# not OTP, 2FA passwords, or Telegram session strings.
+# Temporary verification state.
+# No OTP, 2FA password, or Telegram session string is stored.
 verified_users = {}
 
 
-# ==========================================
-# TELEGRAM MINI APP INIT DATA VERIFICATION
-# ==========================================
-
 def verify_telegram_init_data(init_data, bot_token):
     try:
-
         if not init_data:
             return None, "Missing Telegram initData"
 
@@ -37,10 +31,7 @@ def verify_telegram_init_data(init_data, bot_token):
             keep_blank_values=True
         )
 
-        received_hash = parsed.get(
-            "hash",
-            [None]
-        )[0]
+        received_hash = parsed.get("hash", [None])[0]
 
         if not received_hash:
             return None, "Missing Telegram hash"
@@ -48,12 +39,10 @@ def verify_telegram_init_data(init_data, bot_token):
         data_check_parts = []
 
         for key in sorted(parsed.keys()):
-
             if key == "hash":
                 continue
 
             value = parsed[key][0]
-
             data_check_parts.append(
                 f"{key}={value}"
             )
@@ -62,7 +51,6 @@ def verify_telegram_init_data(init_data, bot_token):
             data_check_parts
         )
 
-        # Telegram Mini App secret key
         secret_key = hmac.new(
             b"WebAppData",
             bot_token.encode("utf-8"),
@@ -81,10 +69,6 @@ def verify_telegram_init_data(init_data, bot_token):
         ):
             return None, "Invalid Telegram signature"
 
-        # ======================================
-        # AUTH DATE CHECK
-        # ======================================
-
         auth_date_raw = parsed.get(
             "auth_date",
             [None]
@@ -98,13 +82,9 @@ def verify_telegram_init_data(init_data, bot_token):
         except ValueError:
             return None, "Invalid auth_date"
 
-        # Reject data older than 24 hours
+        # Telegram Mini App data older than 24 hours is rejected.
         if time.time() - auth_date > 86400:
             return None, "Telegram authorization expired"
-
-        # ======================================
-        # USER DATA
-        # ======================================
 
         user_raw = parsed.get(
             "user",
@@ -125,11 +105,7 @@ def verify_telegram_init_data(init_data, bot_token):
         return telegram_user, None
 
     except Exception as error:
-
-        return None, (
-            "Verification error: "
-            + str(error)
-        )
+        return None, f"Verification error: {str(error)}"
 
 
 # ==========================================
@@ -138,7 +114,6 @@ def verify_telegram_init_data(init_data, bot_token):
 
 @app.get("/")
 def home():
-
     return jsonify({
         "status": "online",
         "service": "Auto DM Mini App Backend"
@@ -151,7 +126,6 @@ def home():
 
 @app.get("/health")
 def health():
-
     return jsonify({
         "status": "ok"
     })
@@ -165,7 +139,6 @@ def health():
 def verify():
 
     if not BOT_TOKEN:
-
         return jsonify({
             "ok": False,
             "error": "BOT_TOKEN is not configured"
@@ -175,81 +148,53 @@ def verify():
         silent=True
     ) or {}
 
-    init_data = body.get(
-        "initData"
-    )
+    init_data = body.get("initData")
 
     if not init_data:
-
         return jsonify({
             "ok": False,
             "error": "Telegram initData is required"
         }), 400
 
-    telegram_user, error = (
-        verify_telegram_init_data(
-            init_data,
-            BOT_TOKEN
-        )
+    telegram_user, error = verify_telegram_init_data(
+        init_data,
+        BOT_TOKEN
     )
 
     if error:
-
         return jsonify({
             "ok": False,
             "error": error
         }), 401
 
     user_id = str(
-        telegram_user.get("id")
+        telegram_user["id"]
     )
 
-    # ======================================
-    # TEMPORARY VERIFIED STATE
-    # ======================================
-
     verified_users[user_id] = {
-
         "verified": True,
-
-        "verified_at": int(
-            time.time()
-        ),
-
+        "verified_at": int(time.time()),
         "user": {
-
-            "id":
-                telegram_user.get("id"),
-
-            "first_name":
-                telegram_user.get(
-                    "first_name",
-                    ""
-                ),
-
-            "last_name":
-                telegram_user.get(
-                    "last_name",
-                    ""
-                ),
-
-            "username":
-                telegram_user.get(
-                    "username",
-                    ""
-                )
+            "id": telegram_user.get("id"),
+            "first_name": telegram_user.get(
+                "first_name",
+                ""
+            ),
+            "last_name": telegram_user.get(
+                "last_name",
+                ""
+            ),
+            "username": telegram_user.get(
+                "username",
+                ""
+            )
         }
     }
 
     return jsonify({
-
         "ok": True,
-
         "verified": True,
-
-        "user":
-            verified_users[user_id]["user"]
-
+        "user": verified_users[user_id]["user"]
     })
 
 
@@ -262,34 +207,21 @@ def verification_status(user_id):
 
     user_id = str(user_id)
 
-    data = verified_users.get(
-        user_id
-    )
+    data = verified_users.get(user_id)
 
     if not data:
-
         return jsonify({
-
             "ok": True,
-
             "verified": False
-
         })
 
-    # ======================================
-    # OPTIONAL EXPIRY
-    # ======================================
-
+    # Verification expires after 24 hours.
     verified_at = data.get(
         "verified_at",
         0
     )
 
-    # Verification remains valid for 24 hours
-    if (
-        time.time() -
-        verified_at
-    ) > 86400:
+    if time.time() - verified_at > 86400:
 
         verified_users.pop(
             user_id,
@@ -297,45 +229,32 @@ def verification_status(user_id):
         )
 
         return jsonify({
-
             "ok": True,
-
             "verified": False
-
         })
 
     return jsonify({
-
         "ok": True,
-
         "verified": True,
-
-        "user":
-            data["user"]
-
+        "user": data["user"]
     })
 
 
 # ==========================================
-# CLEAR VERIFICATION
+# LOGOUT / CLEAR VERIFICATION
 # ==========================================
 
 @app.post("/api/logout/<user_id>")
 def logout(user_id):
 
-    user_id = str(user_id)
-
     verified_users.pop(
-        user_id,
+        str(user_id),
         None
     )
 
     return jsonify({
-
         "ok": True,
-
         "verified": False
-
     })
 
 
@@ -356,4 +275,3 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=port
     )
-
